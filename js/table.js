@@ -7,7 +7,8 @@ TABLES['students'] = {
       ["Matti", 43,"Malmi", "Helsinki", "12345"],
       ["Arto", 31, "Tapiola", "Espoo", "12431"],
       ["Pekka", 19, "Eira", "Helsinki", "11221"],
-      ["Joni", 22, "Kontula", "Helsinki","11111"]
+      ["Joni", 22, "Kontula", "Helsinki", "11111"],
+      ["Jarmo", 23, "Korso", "Vantaa", "11112"]
   ]
 }
 
@@ -16,7 +17,8 @@ TABLES['courses'] = {
   data: [
       ["OhPe", 5, 1],
       ["TiKaPe", 5, 2],
-      ["TiRa", 10, 3]
+      ["TiRa", 10, 3],
+      ["JTKT", 8, 4]
   ]
 }
 
@@ -28,6 +30,9 @@ TABLES['participations'] = {
       [3, 1, "12431", 1],
       [4, 2, "12431", 0],
       [5, 3, "12345", 5],
-      [6, 1, "12345", 4]
+      [6, 1, "12345", 4],
+      [7, 1, "11112", 5],
+      [8, 4, "11111", 3],
+      [9, 4, "12345", 0]
   ]
 }

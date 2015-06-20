@@ -161,6 +161,55 @@
             <query db="db"></query>
         </div>
 
+        <h2>Kyselyn tulostaulun rivien järjestäminen</h2>
+
+        <p>
+        Kyselyn tulostaulun rivit voidaan järjestää liittämällä kyselyyn <em>order by</em> -osa, joka luettelee ne sarakkeet, joiden perusteella tulostaulun rivit järjestetään.
+        </p>
+        <p>
+        Seuraaavssa listataan opiskelijat iän mukaan järjestettynä:
+        </p>
+
+        <query
+            db="db"
+            query="select * from students order by age"
+            editable="false"
+            done="done6">
+        </query>
+
+        <p>
+        On mahdollista määritellä myös useita järjestämiskriteerejä, tällöin järjestysperusteena toimivat sarakkeet luetellaan order by -osassa pilkulla erotettuna.
+        </p>
+
+        <p>
+        Seuraaavssa listataan opiskelijat kaupungin mukaan ja samassa kaupungissa asuvat iän mukaan <em>käänteisesti</em> järjestettynä:
+        </p>
+
+        <query
+            db="db"
+            query="select * from students order by city, age desc"
+            editable="false"
+            done="done7">
+        </query>
+
+        <div ng-show="done6&&done7">
+            <strong>Tehtävät</strong>
+
+            <p>Tee seuraavat kyselyt</p>
+
+            <ul>
+                <li>listaa kurssit nimen mukaan järjestettynä</li>
+                <li>listaa kurssisuoritukset (taulu participations) arvosanan mukaan käänteisesti järjestettynä</li>
+                <li>listaa hyväksytyt kurssisuoritukset, eli ne joiden arvosanan on vähintään 1 arvosanan mukaan käänteisesti järjestettynä, näytä tuloksessa ainoastaan arvosana ja opiskelijanumero</li>
+            </ul>
+
+            <togglable content="taulut">
+                <table-info></table-info>
+            </togglable>
+
+            <query db="db"></query>
+        </div>
+
     </div>
 </body>
 </html>
