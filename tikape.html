@@ -29,7 +29,7 @@
         </p>
 
         <p>
-        Useimpien esimerkkien jälkeen avauttu muutama tehtävä, jossa pääset harjoittelemaa nesimerkkiä vastaavia kyselyjä.
+        Useimpien esimerkkien jälkeen avauttu muutama tehtävä, jossa pääset harjoittelemaa esimerkkiä vastaavia kyselyjä.
         </p>
 
         <h2>Taulun tietojen listaaminen</h2>
@@ -77,7 +77,7 @@
         <h2>Listattavien tietojen valinta</h2>
 
         <p>
-        Selectin yhteydessä voidaan määritellä, mitä sarakkeita tuloksessa näytetään. Määritellään seuraavaksi näytettäväksi ainoastaan nimi ja ikä
+        Selectin yhteydessä voidaan määritellä, mitä sarakkeita tuloksessa näytetään. Määritellään seuraavaksi näytettäväksi ainoastaan nimi ja ikä:
         </p>
 
         <query
@@ -105,7 +105,7 @@
 
             <ul>
                 <li>listaa kurssien nimet ja opintopistemäärät</li>
-                <li>listaa kurssien nimet ja opintopistemäärät siten, että nimen kertovan sarakkeen nimeksi tulee 'nimi' ja opintopistesarakkeen nimeksi tulee <em>op</em></li>
+                <li>listaa kurssien nimet ja opintopistemäärät siten, että nimen kertovan sarakkeen nimeksi tulee <em>nimi</em> ja opintopistesarakkeen nimeksi tulee <em>op</em></li>
             </ul>
 
             <togglable content="taulut">
@@ -118,8 +118,15 @@
         <h2>Listattavien rivien valinta</h2>
 
         <p>
-        Edellä tehdyissä kyselyissä on aina näytetty kaikki taulun rivit. Voimme rajoittaa näytettävien rivien määrää asettamalla riveille sarakkeen arvoihin perustuvia ehtoja kyselyyn liittyvässä <em>where</em>-osassa.
+        Edellä tehdyissä kyselyissä on aina näytetty kaikki taulun rivit. Voimme rajoittaa näytettävien rivien määrää asettamalla riveille sarakkeen arvoihin perustuvia ehtoja kyselyyn liittyvässä <em>where</em>-osassa:
         </p>
+
+        <pre>
+        SELECT *
+        FROM taulun_nimi
+        WHERE ehdot
+        </pre>
+
         <p>
         Seuraaavssa näytämme ainoastaan yli 25 vuotiaat opiskelijat:
         </p>
@@ -131,7 +138,7 @@
             done="done4">
         </query>
 
-        <p>Kyselylle voidaan asettaa useita ehtoja, jotka kohdistuvat joko yhden tai useampaan sarakkeen arvoon. Tällöin eri ehdot on eroteltava and:illä.</p>
+        <p>Kyselylle voidaan asettaa useita ehtoja, jotka kohdistuvat joko yhden tai useampaan sarakkeen arvoon. Tällöin eri ehdot on eroteltava <em>and</em>illä.</p>
 
         <p>
         Seuraaavssa näytämme yli 25 vuotiaat, Helsingissä asuvat opiskelijat:
@@ -166,8 +173,15 @@
         <p>
         Kyselyn tulostaulun rivit voidaan järjestää liittämällä kyselyyn <em>order by</em> -osa, joka luettelee ne sarakkeet, joiden perusteella tulostaulun rivit järjestetään.
         </p>
+
+        <pre>
+        SELECT *
+        FROM taulun_nimi
+        ORDER BY sarakkeet
+        </pre>
+
         <p>
-        Seuraaavssa listataan opiskelijat iän mukaan järjestettynä:
+        Seuraavssa listataan opiskelijat iän mukaan järjestettynä:
         </p>
 
         <query
@@ -178,7 +192,7 @@
         </query>
 
         <p>
-        On mahdollista määritellä myös useita järjestämiskriteerejä, tällöin järjestysperusteena toimivat sarakkeet luetellaan order by -osassa pilkulla erotettuna.
+        On mahdollista määritellä myös useita järjestämiskriteerejä, tällöin järjestysperusteena toimivat sarakkeet luetellaan <em>order by</em> -osassa pilkulla erotettuna.
         </p>
 
         <p>
@@ -192,7 +206,29 @@
             done="done7">
         </query>
 
-        <div ng-show="done6&&done7">
+        <p>
+        Jos kyselyssä on myös valittavia rivejä rajoittava <em>where</em>-osa, tulee sen sijaita ennen <em>order by</em> -osaa:
+        </p>
+
+        <pre>
+        SELECT *
+        FROM taulun_nimi
+        WHERE ehdot
+        ORDER BY sarakkeet
+        </pre>
+
+        <p>
+        Seuraaavssa listataan iän mukaan <em>käänteisesti</em> järjestettynä Helsingissä asuvat opiskelijat:
+        </p>
+
+        <query
+            db="db"
+            query="select * from students where city='Helsinki' order by age desc"
+            editable="false"
+            done="done8">
+        </query>
+
+        <div ng-show="done6&&done7&&done8">
             <strong>Tehtävät</strong>
 
             <p>Tee seuraavat kyselyt</p>
