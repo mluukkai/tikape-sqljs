@@ -7,6 +7,7 @@
     <script src='js/sql.js'></script>
     <script src='js/table.js'></script>
     <script src='js/app.js'></script>
+    <script src='js/directives.js'></script>
 </head>
 <body ng-app='myApp' >
 
@@ -21,6 +22,16 @@
         Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
         </p>
 
+        <h2>Ohjeita lukijalle</h2>
+
+        <p>
+        Materiaali sisältää opiskelijoiden kurssisuorituksia kuvaavan tietokannan ja lähes jokainen materiaalin esimerkkikysely on "suoritettava", eli klikaamalla esimerkin yhteydessä olevaa nappia <em>suorita kysely</em> kysely suoritetaan ja tulos näytetään ruudulla.
+        </p>
+
+        <p>
+        Useimpien esimerkkien jälkeen avauttu muutama tehtävä, jossa pääset harjoittelemaa nesimerkkiä vastaavia kyselyjä.
+        </p>
+
         <h2>Taulun tietojen listaaminen</h2>
 
         <p>
@@ -32,14 +43,10 @@
         </pre>
 
         <p>
-        Tietokannassamme on seuraavat taulut
+        Tämän luvun kaikissa esimerkeissä tietokannassamme on seuraavat taulut
         </p>
 
-        <ul>
-            <li ng-repeat="table in tables">
-                {{table}} ({{table_details(table)}})
-            </li>
-        </ul>
+        <table-info></table-info>
 
         <p>
             Saamme listattua kaikki opiskelijat, eli taulun <em>students</em> kaikki rivit seuraavasti:
@@ -56,8 +63,12 @@
             <strong>Tehtävät</strong>
 
             <p>
-                Tee nyt kysely, jolla saat listattua kaikki kurssit
+                Tee nyt kysely, jolla saat listattua kaikki kurssit.
             </p>
+
+            <togglable content="taulut">
+                <table-info></table-info>
+            </togglable>
 
             <query db="db"></query>
 
@@ -94,8 +105,12 @@
 
             <ul>
                 <li>listaa kurssien nimet ja opintopistemäärät</li>
-                <li>listaalistaa kurssien nimet ja opintopistemäärät siten, että nimen kertovan sarakkeen nimeksi tulee 'nimi' ja opintopistesarakkeen nimeksi tulee <em>op</em></li>
+                <li>listaa kurssien nimet ja opintopistemäärät siten, että nimen kertovan sarakkeen nimeksi tulee 'nimi' ja opintopistesarakkeen nimeksi tulee <em>op</em></li>
             </ul>
+
+            <togglable content="taulut">
+                <table-info></table-info>
+            </togglable>
 
             <query db="db"></query>
         </div>
@@ -138,6 +153,10 @@
                 <li>listaa yli 6 opintopisteen arvoiset kurssit</li>
                 <li>listaa opiskelijat joiden ikä on vähintään 10 ja korkeintaan 40</li>
             </ul>
+
+            <togglable content="taulut">
+                <table-info></table-info>
+            </togglable>
 
             <query db="db"></query>
         </div>
