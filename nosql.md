@@ -378,6 +378,14 @@ Jossain tapauksessa paras ratkaisu olisi luopua liitosdokumenteista eli kokoelma
 
 Tämä ratkaisu vaikeuttaisi kurssin suorittajien selvittämistä, joten joissain käyttötapauksissa saattaisi olla edullista sisällyttää suoritukset <em>molempiin</em> opiskelijoihin ja kurssiin.
 
+Yhtä "oikeaa" vastausta miten sovelluksen data kannattaa mallintaa dokumenttikannan kokoelmiksi ja dokumenteiksi ei ole olemassa. Parhaaseen tapaan vaikuttaa suuresti se minkälainen käyttöprofiili rakennettavalla sovelluksella on: datamalli kannattaa valita siten että se tekee yleisimpien operaatioiden suorituksen nopeaksi ja helpoksi.
+
+kyselyt yhteen tauluun
+
+ei transaktioita
+
+ei joineja
+
 <h4>Sarake- ja verkkotietokannat</h4>
 
 <h3>NOSql ja NewSql</h3>
