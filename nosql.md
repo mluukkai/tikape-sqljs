@@ -396,8 +396,8 @@ NoSQL-tietokannat löivät läpi suuren kohun saattamina ja erityisesti startupe
 
 Kahtiajaon hieman liuettua termin NoSQL sijaan onkin alettu puhua <em>Not Only SQL</em> -tietokannoista, ja termi on muokkautunut muotoon <em>NOSQL</em>. Päätään nostaa esille myös termi <em>NewSQL</em>, joka wikipedian mukaan tarkoittaa seuraavaa:
 
-<quote>
+<em>
 NewSQL is a class of modern relational database management systems that seek to provide the same scalable performance of NoSQL systems for online transaction processing (OLTP) read-write workloads while still maintaining the ACID guarantees of a traditional database system.
-</quote>
+</em>
 
 ...jatkuu vielä...
