@@ -1,6 +1,6 @@
 <h2>NoSQL eli muut kuin relaatiomallia noudattavat tietokannat</h2>
 
-Relaatiomalli ja SQL ovat hyvin ilmaisuvoimainen kombinaatio jolla pystyy ainakin teoriassa hoitamaan kaikki mahdolliset tiedonhallintatarpeet. Relaatiotietokannat dominoivatkin tietokantaskeneä muutaman kymmenen vuoden ajan. 2000-luvulla alkoi kuitenkin nousta esiin uuden tyyppisiä tietokantaratkaisuja joita kuvaamaan lanseeratiin vuonna 2009 termi <em>NoSQL</em>.
+Relaatiomalli ja SQL ovat hyvin ilmaisuvoimainen kombinaatio ja relaatiotietokannoilla pystytään ainakin teoriassa hoitamaan kaikki mahdolliset tiedonhallintatarpeet. Relaatiotietokannat dominoivatkin tietokantaskeneä muutaman kymmenen vuoden ajan. 2000-luvulla alkoi kuitenkin nousta esiin uuden tyyppisiä tietokantaratkaisuja joita kuvaamaan lanseeratiin vuonna 2009 termi <em>NoSQL</em>.
 
 <h3>Syitä uusien tietokantaratkaisujen syntyyn</h3>
 
