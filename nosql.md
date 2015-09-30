@@ -170,6 +170,8 @@ Lisää avain-arvotietokannoista esim. <a href="https://en.wikipedia.org/wiki/Ke
 
 Dokumeenttitietokantojen voi ajatella sijoittuvan jonnekin relaatiotietokantojen ja avain-arvotietokantojen puolen välin tienoille. Dokumenttikannat perustuvat avain-arvotietokantojen tapaan arvojen tallettamiseen avaimen perusteella. Arvot tai <em>dokumentit</em> kuten niitä dokumenttikantojen kontekstissa nimitetään voivat kuitenkin olla itsessään hyvin monimutkaisia oliota, jotka sisältävät kenttiä, joiden arvona voi olla joko promitiiviarvoja tai muita olioita. Toisin kuin avain-arvotietokannoissa, dokeumenttikannat "näkevät" tietokantaan talletettujen dokumenttien sisään, ja mahdollistavat talletettujen dokumenttien sisällön suhteen tehdyt kyselyt.
 
+Käytetään seuraavassa esimerkkinä ylivoimaisesti suosituimman dokumenttitietokannan <a href="https://www.mongodb.org/">MongoDB:n</a> merkintöjä.
+
 Dokumenttikannoissa käytetään tiedon loogisena esitysmuotona <a href="https://fi.wikipedia.org/wiki/JSON">JSON</a>:ia. Seuraavassa
 kurssia </em>Ohjelmoinnin perusteet</em> esittävä JSON-dokumentti:
 
@@ -205,8 +207,176 @@ Nyt kentän osoite arvona on olio jolla on itsellään omat kenttänsä.
 
 Dokumenttitietokannassa dokumentit on lajuteltu <em>kokoelmiin</em> (engs. collection). Kokoelman merkitys on suunilleen sama kuin taulun relaatiotietokannassa. Yhdessä kokoelmassa olevien dokumenttien ei kuitenkaa tarvitse olla kentiltään samanlaisia. Kenttiä voi olla vaihteleva määrä ja saman nimiset kentät voivat sisältää eri dokumenteilla eri tyyppisen arvon. Kokoelmille ei määritellä dokumenttikannoissa minkäänlaista skeemaa, eli on täysin sovellusten vastuulla, että kantaan talletetaan järkevää dataa, ja että kannasta luettava data tutkitaan oikein.
 
+Kuten edellä opiskelijan kohdalla näimme, on dokumenttikannoissa mahdollista sisällyttää olioita toistensa sisään. Tilanne olisi myös voitu mallintaa "relaatiomallin tapaan" siten, että osoitteita varten olisi oma kokoelmansa, ja yksittäinen osoite mallinnettaisiin omana dokumenttina:
 
+<pre>
+{
+  {
+    "id" : 123,
+    "katu" : "Tehtaankatu 10 B 1",
+    "postinumero" : "00120",
+    "postitoimipaikka" : "Helsinki"
+  }
+}
+</pre>
 
+Opiskelijadokumentti sisältäisi nyt ainoastaan viitteen osoitedokumenttiin:
+
+<pre>
+{
+  "id" : 59,
+  "nimi" : "Pekka Mikkola",
+  "opiskelijanumero" : 14112345,
+  "osoite" : 123
+}
+</pre>
+
+Toisin kuin relaatiotietokantojen tapauksessa, dokumenttikannat <em>eivät tarjoa</em> tietokannan tasolla tapahtuvia <em>liitosoperaatiota</em>, ja edellisen esimerkin tapauksessa sovelluksen olisi itse huolehdittava siitä, että opiskelijaa haettaessa, haetaan myös opiskelijan osoite tietokannasta.
+
+Vaikka operaatio ei olekaan dokumenttikannan tasolla tuettu, on olemassa monia kirjastoja (esim. Javalle <a href="https://mongodb.github.io/morphia/">Morphia</a>), jotka toteuttavat ohjelmallisen liitosoperaation siten, että sovellusohjelman ei tarvitse siitä huolehtia.
+
+Relaatiotietokannoissa kannan skeeman muodostaminen on sikäli helppoa, että jos pyritään normalisoituun ratkaisuun on useimmissa tilanteissa olemassa noin yksi "järkevä" ratkaisu joka toimii lähes yhtä hyvin riippumatta siitä miten kantaa käytetään.
+
+Dokumenttikantojen suhteen tilanne on toinen. Tarkastellaan esimerkiksi Kursseja ja Opiskelijoiden kurssisuorituksia. Relaatiotietokannassa tilanne olisi suoraviivainen Suoritus olisi Kurssin ja Opiskelijan liitostaulu.
+
+Eräs mahdollisuus olisi tehdä täsmälleen sama ratkaisu dokumenttikannassa.
+
+Kokoelma Opiskelija:
+
+<pre>
+[
+  {
+    "id": 10
+    "nimi" : "Lea Kutvonen",
+    "opiskelijanumero" : "13457678"
+  },
+  {
+    "id": 11
+    "nimi" : "Pekka Mikkola",
+    "opiskelijanumero" : "14012345"
+  }
+]
+</pre>
+
+Kokoelma kurssi:
+
+<pre>
+[
+  {
+    "id": 34
+    "nimi" : "Ohjelmoinnin perusteet",
+    "laajuus" : 5
+  },
+  {
+    "id": 35
+    "nimi" : "Tietokone työvälineenä",
+    "laajuus" : 1
+  }
+]
+</pre>
+
+Suoritus olisi nyt "liitostaulumaien" kokoelma:
+
+<pre>
+[
+  {
+    "id": 55
+    "kurssi_id" : 34,
+    "opiskelija_id" : 10,
+    "arvosana" : 4
+  },
+  {
+    "id": 56
+    "kurssi_id" : 35,
+    "opiskelija_id" : 10,
+    "arvosana" : 5
+  },
+  {
+    "id": 57
+    "kurssi_id" : 35,
+    "opiskelija_id" : 10,
+    "arvosana" : 2
+  }
+]
+</pre>
+
+Vaihtoehtoja on kuintekin myös muita. Käyttötapauksista riippuen saattaisi olla edullista tallettaa tieto suorituksista ("liitosdokumentin" id) myös kurssin ja opiskelijan yhteyteen:
+
+Kokoelma Opiskelija:
+
+<pre>
+[
+  {
+    "id": 10
+    "nimi" : "Lea Kutvonen",
+    "opiskelijanumero" : "13457678",
+    "suoritukset" : [ 55, 56 ]
+  },
+  {
+    "id": 11
+    "nimi" : "Pekka Mikkola",
+    "opiskelijanumero" : "14012345",
+    "suoritukset" : [ 57 ]
+  }
+]
+</pre>
+
+Kokoelma kurssi:
+
+<pre>
+[
+  {
+    "id": 34
+    "nimi" : "Ohjelmoinnin perusteet",
+    "laajuus" : 5,
+    "suorittajat" : [10]
+  },
+  {
+    "id": 35
+    "nimi" : "Tietokone työvälineenä",
+    "laajuus" : 1,
+    "suorittajat" : [10, 11]
+  }
+]
+</pre>
+
+Jossain tapauksessa paras ratkaisu olisi luopua liitosdokumenteista eli kokoelmasta suoritukset ja tallettaa suoritukset kokonaisuudessaan opiskelija-dokumentteihin:
+
+<pre>
+[
+  {
+    "id": 10
+    "nimi" : "Lea Kutvonen",
+    "opiskelijanumero" : "13457678",
+    "suoritukset" : [
+      {
+        "id": 55
+        "kurssi_id" : 34,
+        "arvosana" : 4
+      },
+      {
+        "id": 56
+        "kurssi_id" : 35,
+        "arvosana" : 5
+      }
+    ]
+  },
+  {
+    "id": 11
+    "nimi" : "Pekka Mikkola",
+    "opiskelijanumero" : "14012345",
+    "suoritukset" : [
+      {
+        "id": 57
+        "kurssi_id" : 35,
+        "arvosana" : 2
+      }
+    ]
+  }
+]
+</pre>
+
+Tämä ratkaisu vaikeuttaisi kurssin suorittajien selvittämistä, joten joissain käyttötapauksissa saattaisi olla edullista sisällyttää suoritukset <em>molempiin</em> opiskelijoihin ja kurssiin.
 
 <h4>Sarake- ja verkkotietokannat</h4>
 
