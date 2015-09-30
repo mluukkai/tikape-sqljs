@@ -3,7 +3,7 @@
 Relaatiotietokannat dominoivat tietokantaskeneä muutaman kymmenen vuoden ajan. 2000-luvulla alkoi kuitenkin nousta esiin uuden tyyppisiä tietokantaratkaisuja joita kuvaamaan lanseeratiin termi <em>NoSQL</em>.
 
 
-RElatiomalli *one size fits all*
+Relaatiomalli *one size fits all*
 
 <h3>Syitä uusien tietokantaratkaisujen syntyyn</h3>
 
@@ -70,11 +70,104 @@ Redis tajoaa tuen myös arvoille jotka ovat lukuja, joukkoja tai hashejä eli it
 Mitä järkeä avain-arvotietokannoissa on? Ne vaikuttavat ominaisuuksiltaan erittäin rajoittuneilta ja relaatiotietokannoilla pystyy tekemään varmasti kaikki ne asiat, joihin avain-arvotietokannat pystyvät. Rajoituksistaan johtuen avain-arvotietokannat ovat kuitenkin suorituskyvyltän ja skaalautuvuudeltaan huomattavasti parempia kuin relaatiotietokanta, ja niiden avulla pystytään kuitenkin ratkaisemaan monia sovellusten käyttötarpeita. Viime aikoina on kuitenkin ollut nousussa trendi jonka nimitys englanniksi on
 <a href="http://martinfowler.com/bliki/PolyglotPersistence.html">polyglot persistance</a>, joka tarkoittaa suurinpiirtein sitä, että sovelluksessa on useita erityyppisiä tietokantoja ja kuhunkin käyttötarkoitukseen käytetään tarkoituksenmukaisinta ratkaisua.
 
+Eräs hyvin yleinen käyttötarkoitus avain-arvotietokannoille on raskaiden operaatioiden tulosten cacheaminen, eli väliaikainen talletus mahdollisia uusia saman operaatioiden suorituksia varten.
 
-Muita:
-- riak
+Tarkastellaan tästä estimerkkinä internetistä <a href="http://openweathermap.org/api">Open Weather API:sta</a> eri kaupunkien säätietoja hakevaa ohjelmaa. Ohjelma toiminta näyttää seuraavalta:
 
-Käshe, laske lukukauden opintopisteet...
+<pre>
+kaupunki: helsinki
+few clouds, temperature 15.770000000000039 celcisus
+kaupunki: turku
+Sky is Clear, temperature 16.0 celcisus
+kaupunki: vladivostok
+scattered clouds, temperature 11.360000000000014 celcisus
+kaupunki:
+</pre>
+
+Jokaisen kaupungin kohdalla ohjelma hakee kaupungin säätiedot internetistä. Tiedon haku verkosta on kuitenkin hidas ja resurssien kulutuksen suhteen "kallis" operaatio (asialla voisi olla merkitystä jos ohjelmallamme olisi satoja tai tuhansia yhtäaikaisia käyttäjiä). Koska säätiedot pysyvät suunilleen samana useiden minuuttien ajan, ohjelmaa voi optimoida siten, että käytyään kerran jonkun kaupungin säätiedot, talletetaan tieto joksikin aikaa Redisiin. Jos kaupungin säätä kysytään pian uudelleen, saadaan vastaus nopeasti ilman kallista internetoperaatiota.
+
+Seuraavassa sääpalvelun toteuttavan luokan <stron>WeatherService</strong> toteutus, joka hyödyntää
+<a href="https://github.com/xetorthio/jedis">Jedis</a>-kirjastoa Redis-operaatioiden tekemiseen:
+
+<pre>
+import redis.clients.jedis.Jedis;
+
+public class WeatherService {
+    private Jedis jedis;
+
+    public WeatherService() {
+        // luodaan yhteys paikallisen koneen Redisiin
+        jedis = new Jedis("localhost");
+    }
+
+    public void weatherOf(String city) throws Exception {
+        // kutsutaan metodia, joka hakee tiedot joko
+        // Redisistä tai internetistä
+        JsonElement weatherData = getDataFor(city);
+
+        // haetaan vastauksen sisältä oikeat osat
+        double temperature = getTemperatureFrom(weatherData);
+        String desc = getDescriptionFrom(weatherData);
+
+        System.out.println(desc + ", temperature "+temperature+ " celcisus");
+    }
+
+    // metodi joka hakee tiedot joko Redisistä tai internetistä
+    private JsonElement getDataFor(String city) throws Exception {
+        // etsitään kaupungin city säätietoja rediksestä
+        String weatherInfo = jedis.get(city);
+
+        // jos ei löytyny
+        if (weatherInfo==null) {
+            // haetaan tiedot internetistä
+            weatherInfo = readFromUrl("http://api.openweathermap.org/data/2.5/weather?q="+city);
+
+            // ja talletetaan ne redisiin
+            jedis.set(city, weatherInfo);
+            // määritellään tallennusajaksi minuutti
+            jedis.expire(city, 60);
+        }
+
+        return new JsonParser().parse(weatherInfo);
+    }
+
+    // apumetodeja...
+}
+</pre>
+
+Palvelua käytetään seuraavasti:
+
+<pre>
+  WeatherService weather = new WeatherService();
+  weather.weatherFor("Helsinki");
+</pre>
+
+Kun haemme ensimmäistä kertaa esim. kaupungin <em>Helsinki</em> tietoja, etsitään niitä (metodissa <em>getDataFor</em>) ensin rediksestä:
+
+<pre>
+// nyt city = "Helsinki"
+  String weatherInfo = jedis.get(city);
+</pre>
+
+tiedot eivät löydy, joten metodi palauttaa <em>null</em>. Tämän takia mennään if-haaraan, jossa tiedot haetaan apumetodin avulla internetistä. Haetut tiedot talletetaan ensin redisiin:
+
+<pre>
+  // nyt city="Helsinki" ja weatherInfo Helsingin sään 'raakadata'
+  jedis.set(city, weatherInfo);
+</pre>
+
+talletetulle datalle asetetaan myös elinaika sekunneissa:
+
+<pre>
+  jedis.expire(city, 60);
+</pre>
+
+tämän jälkeet data palautetaan kutsujalle.
+
+Jos Helsingin säätietoja haetaan 60 sekunnin sisällä uudelleen, löytyvät tiedot suoraan redististä. 60 sekunnin kuluttua hakuoperaatio <em>jedis.get('Helsinki')</em> palauttaa jälleen <em>null</em> ja tuore säätilanne haetaan internetistä.
+
+Lisää avain-arvotietokannoista esim.<a href="https://en.wikipedia.org/wiki/Key-value_database">Wikipediasta</a>
+
 
 <h4>Dokumenttitietokanta MongoDB</h4>
 
