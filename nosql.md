@@ -177,7 +177,7 @@ kurssia </em>Ohjelmoinnin perusteet</em> esittävä JSON-dokumentti:
 
 <pre>
 {
-  "id": 1,
+  "id": ObjectId("10"),
   "nimi": "Ohjelmoinnin perusteet",
   "laajuus": 5,
   "luennot": [ "Arto Vihavainen", "Matti Luukkainen" ]
@@ -186,13 +186,14 @@ kurssia </em>Ohjelmoinnin perusteet</em> esittävä JSON-dokumentti:
 
 JSON-dokumentti koostuu avain-arvo-pareista. Avainta vastaava arvo merkitään kaksoispisteellä erotettuna avaimen yhteyteen.
 
-Kurssi-dokumentissa on siis kolme avain-arvo-paria, voidaankin ajatella että kurssilla on kolme kenttää. Poikkeavaa relaatiotietokantoihin nähden on se, että kentän arvona voi olla taulukko.
+Kurssi-dokumentissa on siis neljä avain-arvo-paria, voidaankin ajatella että kurssilla on neljä kenttää. Näistä kentistä erikoisasemassa on MongoDB:n dokumentille automaattisesti keneroima avainkenttä <em>id</em> jonka arvo on tyypiltään <em>ObjectId</em>.
+Poikkeavaa relaatiotietokantoihin nähden on se, että kentän arvona voi olla taulukko.
 
 Seuraavassa on opiskelijaa kuvaava dokumentti:
 
 <pre>
 {
-  "id" : 59,
+  "id" : ObjectId("59"),
   "nimi" : "Pekka Mikkola",
   "opiskelijanumero" : 14112345,
   "osoite" : {
@@ -212,7 +213,7 @@ Kuten edellä opiskelijan kohdalla näimme, on dokumenttikannoissa mahdollista s
 <pre>
 {
   {
-    "id" : 123,
+    "id" : ObjectId("123"),
     "katu" : "Tehtaankatu 10 B 1",
     "postinumero" : "00120",
     "postitoimipaikka" : "Helsinki"
@@ -224,10 +225,10 @@ Opiskelijadokumentti sisältäisi nyt ainoastaan viitteen osoitedokumenttiin:
 
 <pre>
 {
-  "id" : 59,
+  "id" : ObjectId("59"),
   "nimi" : "Pekka Mikkola",
   "opiskelijanumero" : 14112345,
-  "osoite" : 123
+  "osoite" : ObjectId("123")
 }
 </pre>
 
@@ -246,12 +247,12 @@ Kokoelma Opiskelija:
 <pre>
 [
   {
-    "id": 10
+    "id": ObjectId("10"),
     "nimi" : "Lea Kutvonen",
     "opiskelijanumero" : "13457678"
   },
   {
-    "id": 11
+    "id": ObjectId("11"),
     "nimi" : "Pekka Mikkola",
     "opiskelijanumero" : "14012345"
   }
@@ -263,12 +264,12 @@ Kokoelma kurssi:
 <pre>
 [
   {
-    "id": 34
+    "id": ObjectId("34"),
     "nimi" : "Ohjelmoinnin perusteet",
     "laajuus" : 5
   },
   {
-    "id": 35
+    "id": ObjectId("35"),
     "nimi" : "Tietokone työvälineenä",
     "laajuus" : 1
   }
@@ -281,20 +282,20 @@ Suoritus olisi nyt "liitostaulumaien" kokoelma:
 [
   {
     "id": 55
-    "kurssi_id" : 34,
-    "opiskelija_id" : 10,
+    "kurssi_id" : ObjectId("34"),
+    "opiskelija_id" : ObjectId("10"),
     "arvosana" : 4
   },
   {
     "id": 56
-    "kurssi_id" : 35,
-    "opiskelija_id" : 10,
+    "kurssi_id" : ObjectId("35"),
+    "opiskelija_id" : ObjectId("10"),
     "arvosana" : 5
   },
   {
     "id": 57
-    "kurssi_id" : 35,
-    "opiskelija_id" : 10,
+    "kurssi_id" : ObjectId("35"),
+    "opiskelija_id" : ObjectId("1§"),
     "arvosana" : 2
   }
 ]
@@ -307,16 +308,16 @@ Kokoelma Opiskelija:
 <pre>
 [
   {
-    "id": 10
+    "id": ObjectId("10")
     "nimi" : "Lea Kutvonen",
     "opiskelijanumero" : "13457678",
-    "suoritukset" : [ 55, 56 ]
+    "suoritukset" : [ ObjectId("55"), ObjectId("56") ]
   },
   {
-    "id": 11
+    "id": ObjectId("11")
     "nimi" : "Pekka Mikkola",
     "opiskelijanumero" : "14012345",
-    "suoritukset" : [ 57 ]
+    "suoritukset" : [ ObjectId("57") ]
   }
 ]
 </pre>
@@ -326,16 +327,16 @@ Kokoelma kurssi:
 <pre>
 [
   {
-    "id": 34
+    "id": ObjectId("34")
     "nimi" : "Ohjelmoinnin perusteet",
     "laajuus" : 5,
-    "suorittajat" : [10]
+    "suorittajat" : [ObjectId("10")]
   },
   {
-    "id": 35
+    "id": ObjectId("35")
     "nimi" : "Tietokone työvälineenä",
     "laajuus" : 1,
-    "suorittajat" : [10, 11]
+    "suorittajat" : [ObjectId("10"), ObjectId("11")]
   }
 ]
 </pre>
@@ -345,30 +346,30 @@ Jossain tapauksessa paras ratkaisu olisi luopua liitosdokumenteista eli kokoelma
 <pre>
 [
   {
-    "id": 10
+    "id": ObjectId("10")
     "nimi" : "Lea Kutvonen",
     "opiskelijanumero" : "13457678",
     "suoritukset" : [
       {
         "id": 55
-        "kurssi_id" : 34,
+        "kurssi_id" : ObjectId("34"),
         "arvosana" : 4
       },
       {
         "id": 56
-        "kurssi_id" : 35,
+        "kurssi_id" : ObjectId("35"),
         "arvosana" : 5
       }
     ]
   },
   {
-    "id": 11
+    "id": ObjectId("11")
     "nimi" : "Pekka Mikkola",
     "opiskelijanumero" : "14012345",
     "suoritukset" : [
       {
         "id": 57
-        "kurssi_id" : 35,
+        "kurssi_id" : ObjectId("35"),
         "arvosana" : 2
       }
     ]
@@ -380,11 +381,11 @@ Tämä ratkaisu vaikeuttaisi kurssin suorittajien selvittämistä, joten joissai
 
 Yhtä "oikeaa" vastausta miten sovelluksen data kannattaa mallintaa dokumenttikannan kokoelmiksi ja dokumenteiksi ei ole olemassa. Parhaaseen tapaan vaikuttaa suuresti se minkälainen käyttöprofiili rakennettavalla sovelluksella on: datamalli kannattaa valita siten että se tekee yleisimpien operaatioiden suorituksen nopeaksi ja helpoksi.
 
-kyselyt yhteen tauluun
+Kuten jo totesimme, dokumenttikannat eivät tue liitosoperaatioita, ja kokoelman tasolla tapahtuvat kyselyt kohdistuvat aina vain yhteen kokoelmaan. Dokumenttikannoilla ei ole mitään standardoitua kyselykieltä, jokaisen kannan kyselykieli on täysin omanlaisensa.
 
-ei transaktioita
+Dokumenttikannat eivät myöskään tue useamman kokoelman yhtäaikaista muuttamista transaktionaalisesti. Kaikki yhteen kokoelmaan suoritettavat tapahtumat tehdään kuitenkin aina transaktionaalisesti.
 
-ei joineja
+Lisää MongoDB:stä ja sen käytöstä eri ohjelmointikielistä käsin löydät esim. osoitteesta <a href="https://docs.mongodb.org/manual/">https://docs.mongodb.org/manual/</a>
 
 <h4>Sarake- ja verkkotietokannat</h4>
 
