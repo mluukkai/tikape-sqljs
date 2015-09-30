@@ -249,12 +249,12 @@ Kokoelma Opiskelija:
   {
     "id": ObjectId("10"),
     "nimi" : "Lea Kutvonen",
-    "opiskelijanumero" : "13457678"
+    "opiskelijanumero" : 13457678
   },
   {
     "id": ObjectId("11"),
     "nimi" : "Pekka Mikkola",
-    "opiskelijanumero" : "14012345"
+    "opiskelijanumero" : 14012345
   }
 ]
 </pre>
@@ -310,13 +310,13 @@ Kokoelma Opiskelija:
   {
     "id": ObjectId("10")
     "nimi" : "Lea Kutvonen",
-    "opiskelijanumero" : "13457678",
+    "opiskelijanumero" : 13457678,
     "suoritukset" : [ ObjectId("55"), ObjectId("56") ]
   },
   {
     "id": ObjectId("11")
     "nimi" : "Pekka Mikkola",
-    "opiskelijanumero" : "14012345",
+    "opiskelijanumero" : 14012345,
     "suoritukset" : [ ObjectId("57") ]
   }
 ]
@@ -348,7 +348,7 @@ Jossain tapauksessa paras ratkaisu olisi luopua liitosdokumenteista eli kokoelma
   {
     "id": ObjectId("10")
     "nimi" : "Lea Kutvonen",
-    "opiskelijanumero" : "13457678",
+    "opiskelijanumero" : 13457678,
     "suoritukset" : [
       {
         "id": 55
@@ -365,7 +365,7 @@ Jossain tapauksessa paras ratkaisu olisi luopua liitosdokumenteista eli kokoelma
   {
     "id": ObjectId("11")
     "nimi" : "Pekka Mikkola",
-    "opiskelijanumero" : "14012345",
+    "opiskelijanumero" : 14012345,
     "suoritukset" : [
       {
         "id": 57
@@ -381,7 +381,7 @@ Tämä ratkaisu vaikeuttaisi kurssin suorittajien selvittämistä, joten joissai
 
 Yhtä "oikeaa" vastausta miten sovelluksen data kannattaa mallintaa dokumenttikannan kokoelmiksi ja dokumenteiksi ei ole olemassa. Parhaaseen tapaan vaikuttaa suuresti se minkälainen käyttöprofiili rakennettavalla sovelluksella on: datamalli kannattaa valita siten että se tekee yleisimpien operaatioiden suorituksen nopeaksi ja helpoksi.
 
-Kuten jo totesimme, dokumenttikannat eivät tue liitosoperaatioita, ja kokoelman tasolla tapahtuvat kyselyt kohdistuvat aina vain yhteen kokoelmaan. Dokumenttikannoilla ei ole mitään standardoitua kyselykieltä, jokaisen kannan kyselykieli on täysin omanlaisensa.
+Kuten jo totesimme, dokumenttikannat eivät tue liitosoperaatioita, ja kokoelman tasolla tapahtuvat kyselyt kohdistuvat aina vain yhteen kokoelmaan. Dokumenttikannoilla ei ole mitään standardoitua kyselykieltä, jokaisen kannan kyselykieli on täysin omanlaisensa. Esim. MongoDB:n kyselykieli ei muistuta kovinkaan läheisesti SQLää.
 
 Dokumenttikannat eivät myöskään tue useamman kokoelman yhtäaikaista muuttamista transaktionaalisesti. Kaikki yhteen kokoelmaan suoritettavat tapahtumat tehdään kuitenkin aina transaktionaalisesti.
 
@@ -389,6 +389,15 @@ Lisää MongoDB:stä ja sen käytöstä eri ohjelmointikielistä käsin löydät
 
 <h4>Sarake- ja verkkotietokannat</h4>
 
-<h3>NOSql ja NewSql</h3>
+<h3>NOSQL ja NewSQL</h3>
 
-teesi... antiteesi... synteesi
+NoSQL-tietokannat löivät läpi suuren kohun saattamina ja erityisesti startupeissa oli muodikasta ottaa käyttöön helpommin suurille käyttäjämäärille skaalautuivia NoSQL-kantoja kuten MongoDB. Pikkuhiljaa kohu on laantunut, ja enenevissä määrin ollaan menossa jo aiemmin mainittuun
+<a href="http://martinfowler.com/bliki/PolyglotPersistence.html">polyglot persistancen</a> nimellä kulkevaan suuntaan, eli valitaan oikea työkalu kuhunkin käyttötarkoitukseen, ja erittäin tyypillistä onkin että jo hieman suuremmissa Web-palveluissa on käytössä dokumentti- avain-arvo- ja relaatiotietokanta. Uusimpana kehityssuuntana on ollut myös se, että vanhat relaatiotietokannat ovat ottaneet vaikutteita muista tietokantatyypeistä. Esim. tämän hetken ehkä suosituin Open Source -relaatiotietokanta PostgeSQL sisältää paljon  <a href="http://www.postgresql.org/docs/9.4/static/datatype-json.html">dokumenttitietokantoja vastaavaa toiminnallisuutta</a>. Kehitystä on tapahtunut myös toiseen suuntaan, jotkut dokumenttitietokannat ovat mahdollistaneet <a href="https://azure.microsoft.com/en-us/documentation/articles/documentdb-sql-query/">SQL:n käytön kyselykielenä.</a>
+
+Kahtiajaon hieman liuettua termin NoSQL sijaan onkin alettu puhua <em>Not Only SQL</em> -tietokannoista, ja termi on muokkautunut muotoon <em>NOSQL</em>. Päätään nostaa esille myös termi <em>NewSQL</em>, joka wikipedian mukaan tarkoittaa seuraavaa:
+
+<quote>
+NewSQL is a class of modern relational database management systems that seek to provide the same scalable performance of NoSQL systems for online transaction processing (OLTP) read-write workloads while still maintaining the ACID guarantees of a traditional database system.
+</quote>
+
+...jatkuu vielä...
