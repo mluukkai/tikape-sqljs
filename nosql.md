@@ -435,7 +435,7 @@ Sex:M;F;F;M
 Sallary:40000;50000;44000;55000
 
 // muut sarakkeet....
-</pre>pre
+</pre>
 
 Tehtäessä sama kysely, riittäisi että levyltä luettaisiin ainoastaan kyselyn kannalta tarpeellisten sarakkeiden tieto. Jos sarakkeita olisi suuri määrä, ero riveittäin talletettuun tietokantaan olisi suorituskyvyltään huomattava.
 
