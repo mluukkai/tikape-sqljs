@@ -164,7 +164,7 @@ Jos Helsingin säätietoja haetaan 60 sekunnin sisällä uudelleen, löytyvät t
 Ohjelman koodi kokonaisuudessan löytyy
 <a href="https://github.com/tietokantojen-perusteet/WeatherApp">GitHubista</a>
 
-Lisää avain-arvotietokannoista esim. <a href="https://en.wikipedia.org/wiki/Key-value_database">wikipediasta</a>
+<a href="http://db-engines.com/en/ranking/key-value+store">Suosituimmat</a>avain-arvotietokannoat.
 
 <h4>Dokumenttitietokannat, MongoDB</h4>
 
@@ -387,17 +387,78 @@ Dokumenttikannat eivät myöskään tue useamman kokoelman yhtäaikaista muuttam
 
 Lisää MongoDB:stä ja sen käytöstä eri ohjelmointikielistä käsin löydät esim. osoitteesta <a href="https://docs.mongodb.org/manual/">https://docs.mongodb.org/manual/</a>
 
-<h4>Sarake- ja verkkotietokannat</h4>
+<a href="http://db-engines.com/en/ranking/document+store">Suosituimmat</a> dokumenttitietokannat.
+
+<h4>Saraketietokannat</h4>
+
+Relaatiomalli sopii suhteellisen hyvin tilanteisiin, joissa tietoa käsitellään lyhyin, pääasiassa yksittäisiin tietokantataulujen riveihin kohdistuvin operaatioiden avulla (englanniksi tälläisestä tiedonkäsittelystä käytetään nimitystä <em>online transaction processing, OLTP</em>). Näin tapahtuu esimerkiksi pankin asiakastietokannassa kun asiakkaat tekevät saldokyselyjä, nostavat rahaa tai tekevät tilisiirtoja.
+
+Tietokanntojen käyttö on aivan erilaista silloin kun tavoitteena on luoda raportteja tai  analysoida dataa eri tavoin, esim. selvittää pankin asiakkaiden keskimääräinen saldo tietyllä aikavälillä. Tällöin kyselyt kohdistuvat lähes koko tauluun, mutta usein vain pieneen osaan taulun sarakkeissa
+(englanniksi tälläisestä tiedonkäsittelystä käytetään nimitystä <em>online analytical processing, OLAP</em>).
+Analyysitietokannoissa tilanne on usein se, että tieto ei ole normalisoidussa muodossa, yksittäiset taulut saattavat sisältää satojakin sarakkeita, mutta toisaalta läheskään kaikilla sarakkeilla ei ole kannassa arvoja. Näissä tilanteissa relaatiotietokantojen suorituskyky saattaa olla huono, ja saraketietokannat (engl. columnar databases) voivat tarjota huomattavasti paremman vaihtoehdon.
+
+Tarkastellaan tilannetta esimerkin kautta. Oletetaan, että analyysiin käytettyyn tietokannassa on talletettu firman työntekijöitä:
+
+<pre>
+EmpId Lastname  Firstname Sex Salary  YearsEmplyed
+10    Smith     Joe       M   40000   1
+12    Jones     Mary      F   50000   6
+11    Johnson   Cathy     F   44000   3
+22    Jones     Bob       M   55000   9
+</pre>
+
+Relaatiotietokannat tallettavat tiedon levylle <em>riveittäin</em>, eli taulu tallentuisi levylle seuraavasti:
+
+<pre>
+10;Smith;Joe;M;40000;1;12;Jones;Mary;F;50000;6;...
+</pre>
+
+jos nyt haluttaisiin selvitää yrityksessä vähintään 5 työskennelleiden keskipalkka, eli tehtäisiin kysely
+
+<pre>
+SELECT avg(*) FROM Employees WHERE YearsEmployed>4
+</pre>
+
+olisi relaatiotietokannan tapauksessa luettava taulun <em>koko data</em> levyltä siitä huolimatta, että kysely ei tarvitse kuin pientä osaa taulun datasta. Jos taulussa olisi satoja sarakkeita (mikä on varsin tyypillistä analytiikkatietokannoissa), olisi kyselyn tekeminen erittäin hidasta johtuen juuri tarpeettoman raskaasta, kaiken datan hakevasta levyoperaatiosta.
+
+Saraketietokannoissa tiedot talletetaan sarakkeittain, kaskeasti ottaen jokainen sarake omaan tiedostoonsa. Edellinen tietokanta siis talletettaisiin kutakuinkin seuraavasti
+
+<pre>
+EmpId: 10;12;11;22
+
+Lastname:Smith;Jones;Johnson;Jones
+
+Firstname:Joe;Mary;Cathy;Bob
+
+Sex:M;F;F;M
+
+Sallary:40000;50000;44000;55000
+
+// muut sarakkeet....
+</pre>pre
+
+Tehtäessä sama kysely, riittäisi että levyltä luettaisiin ainoastaan kyselyn kannalta tarpeellisten sarakkeiden tieto. Jos sarakkeita olisi suuri määrä, ero riveittäin talletettuun tietokantaan olisi suorituskyvyltään huomattava.
+
+Osassa saraketietokannoissa data on organisoitu relaatiotietokantojen tapaan tauluihin ja dataa hallitaan SQL:llä. Uudemman polven saraketietokannat taas noudattavat enemmän yhden tai muutaman ison tai "leveän" taulun mallia. Tauluissa on sarakkeita erittäin suuri määrä, mutta läheskään kaikilla sarakkeilla ei ole arvoa. Näiden esikuvana on Googlen vuodesta 2004 asti kehittämä <a href="https://en.wikipedia.org/wiki/BigTable">BigTable</a>. BigTablen tapaan uuden polven ratkaisut mahdollistavat massiivisten datamäärien rinnakkaiskäsittelyn.
+
+<a href="http://db-engines.com/en/ranking/wide+column+store">Suosituimmat</a> uuden saraketietokannat.
+
+<h4>Verkkotietokannat</h4>
+
+<a href="http://db-engines.com/en/ranking/graph+dbms">Suosituimmat</a> verkkotietokannat.
+
 
 <h3>NOSQL ja NewSQL</h3>
 
 NoSQL-tietokannat löivät läpi suuren kohun saattamina ja erityisesti startupeissa oli muodikasta ottaa käyttöön helpommin suurille käyttäjämäärille skaalautuivia NoSQL-kantoja kuten MongoDB. Pikkuhiljaa kohu on laantunut, ja enenevissä määrin ollaan menossa jo aiemmin mainittuun
 <a href="http://martinfowler.com/bliki/PolyglotPersistence.html">polyglot persistancen</a> nimellä kulkevaan suuntaan, eli valitaan oikea työkalu kuhunkin käyttötarkoitukseen, ja erittäin tyypillistä onkin että jo hieman suuremmissa Web-palveluissa on käytössä dokumentti- avain-arvo- ja relaatiotietokanta. Uusimpana kehityssuuntana on ollut myös se, että vanhat relaatiotietokannat ovat ottaneet vaikutteita muista tietokantatyypeistä. Esim. tämän hetken ehkä suosituin Open Source -relaatiotietokanta PostgeSQL sisältää paljon  <a href="http://www.postgresql.org/docs/9.4/static/datatype-json.html">dokumenttitietokantoja vastaavaa toiminnallisuutta</a>. Kehitystä on tapahtunut myös toiseen suuntaan, jotkut dokumenttitietokannat ovat mahdollistaneet <a href="https://azure.microsoft.com/en-us/documentation/articles/documentdb-sql-query/">SQL:n käytön kyselykielenä.</a>
 
-Kahtiajaon hieman liuettua termin NoSQL sijaan onkin alettu puhua <em>Not Only SQL</em> -tietokannoista, ja termi on muokkautunut muotoon <em>NOSQL</em>. Päätään nostaa esille myös termi <em>NewSQL</em>, joka wikipedian mukaan tarkoittaa seuraavaa:
+Kahtiajaon hieman liuettua termin NoSQL sijaan onkin alettu puhua <em>Not Only SQL</em> -tietokannoista, ja termi on muokkautunut muotoon <em>NOSQL</em>. Päätään nostaa esille myös vielä melko epämääräisesti määritelty termi <em><a href="http://www.dbta.com/Columns/DBA-Corner/What-Is-a-NewSQL-Database-System-104489.aspx">NewSQL</a></em>. Wikipedian mukaan NewSQL:llä tarkoittaa seuraavaa:
 
 <em>
 NewSQL is a class of modern relational database management systems that seek to provide the same scalable performance of NoSQL systems for online transaction processing (OLTP) read-write workloads while still maintaining the ACID guarantees of a traditional database system.
 </em>
 
-...jatkuu vielä...
+Eräs viime aikoina melko paljon huomiota saanut NewSQL-tietokanta on <a href="https://foundationdb.com/">FoundationDB</a> joka sisäiseltä organisoinniltaan on avain-arvotietokanta, mutta se tarjoaa kyselykieleksi (myös) SQL:n ja ACID-ominaisuudet takaavat transaktiot eli käyttäytyy sovellusohjelmien kannalta kuten normaali relaatiotietokanta mutta tarjoaa perinteistä relaatiotietokantaa skaalautuvamman ratkaisun.
+
+http://db-engines.com/en/ranking
