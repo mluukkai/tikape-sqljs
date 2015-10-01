@@ -445,6 +445,58 @@ Vanhemmman skupolven saraketietokannoissa data on organisoitu relaatiotietokanto
 
 <h4>Verkkotietokannat</h4>
 
+Relaatiotietokannat ja esittelemämme NoSQL-kannat keskittyvät dataentiteettien esittämiseen. Relaatiotietokannat esittävät entiteetit taulujen riveinä, esim. Henkilö-taulussa jokainen ihminen esitettäisiin omana rivinään. Yhteydet ja suhteet eri entiteettien välillä esitetään epäsuorasti vierasavaimien tai liitostaulujen avulla. Itse yhteys, esim. <em>missä henkilö Arto on töissä</em> saadaan selville vasta kyselyn aikana tapahtuvan liitosoperaation avulla.
+
+Joissain tilanteissa entiteettien suhteiden selvittäminen relaatiotietokannassa saattaa olla erittäin hankalaa. Oletetaan, että meillä on Henkilöitä kuvaava taulu:
+
+
+Henkilö
+-------
+pk id
+nimi
+
+sekä taulu, joka liittää vanhemmat ja lapset toisiinsa:
+
+Vanhemmuus
+-----------
+fk lapsi
+fk vanhempi
+
+Jos nyt haluaisimme selvittää henkilön "Arto Vihavainen" kaikki sukulaiset, huomaamme, että kyselyn tekeminen SQL:llä olisi erittäin vaikeaa.
+
+Vastaavasti jos mallintaisimme relaatiotietokannan avulla karttaa ja meillä olisi taulu kaupungeille:
+
+Kaupunki
+--------
+pk id
+nimi
+maa
+
+ja kaupunkeja yhdistäville teille
+
+Tie
+-----
+int pituus
+fk k1
+fk k2
+
+olisi erittäin hankalaa selvittää SQL:llä esim. mikä on lyhin reitti Helsingistä Roomaan.
+
+Ratkaisun tämänkaltaisiin tilanteisiin tuovat verkkotietokannat, jotka mallintavat eksplisiittisesti sekä entiteetit eli esim. kaupungint ja niiden ominaisuudet että entiteettien väliset suhteet ja niiden ominaisuudet kuten tiet kaupunkien välillä.
+
+Verkkotietokantojen entiteetit eivät ole välttämättä samaa tyyppiä, esim. henkilöitä, entiteettit voivat olla minkä tyyppisiä vaan, ja kaiken tyyppisillä entiteetit voivat verkkotietokannassa olla suhteessa toisiinsa, esim:
+
+             - on jatko-opiskelija ->
+Arto:Henkilö - työskentelee        -> TKTL:laitos
+  |          - harrastaa -> sähly:urheilulaji
+  |          - osuu -> "kukontori 1, espoo":Asunto
+tuntee
+  |
+ \ /
+Matti:Henkilö
+
+Verkkotietokannat tarjoavat kyselykielen, jonka avulla on helppo "navigoida" verkossa. Toisin kuin relaatiotietokannoissa, jotka edellyttävät yhteyden muodostamiseen laskennallisesti kallista join-operaatiota, yhteyksien navigointi verkkotietokannassa on nopeaa. Verkkotietokantojen käyttö onkin yleistynyt esim
+
 <a href="http://db-engines.com/en/ranking/graph+dbms">Suosituimmat</a> verkkotietokannat.
 
 
