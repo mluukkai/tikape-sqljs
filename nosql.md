@@ -439,7 +439,7 @@ Sallary:40000;50000;44000;55000
 
 Tehtäessä sama kysely, riittäisi että levyltä luettaisiin ainoastaan kyselyn kannalta tarpeellisten sarakkeiden tieto. Jos sarakkeita olisi suuri määrä, ero riveittäin talletettuun tietokantaan olisi suorituskyvyltään huomattava.
 
-Osassa saraketietokannoissa data on organisoitu relaatiotietokantojen tapaan tauluihin ja dataa hallitaan SQL:llä. Uudemman polven saraketietokannat taas noudattavat enemmän yhden tai muutaman ison tai "leveän" taulun mallia. Tauluissa on sarakkeita erittäin suuri määrä, mutta läheskään kaikilla sarakkeilla ei ole arvoa. Näiden esikuvana on Googlen vuodesta 2004 asti kehittämä <a href="https://en.wikipedia.org/wiki/BigTable">BigTable</a>. BigTablen tapaan uuden polven ratkaisut mahdollistavat massiivisten datamäärien rinnakkaiskäsittelyn.
+Vanhemmman skupolven saraketietokannoissa data on organisoitu relaatiotietokantojen tapaan tauluihin ja dataa hallitaan SQL:llä. Uudemman polven saraketietokannat taas noudattavat enemmän yhden tai muutaman ison tai "leveän" taulun skeematonta mallia. Tauluissa on sarakkeita erittäin suuri määrä, mutta läheskään kaikilla sarakkeilla ei ole arvoa. Näiden esikuvana on Googlen vuodesta 2004 asti kehittämä <a href="https://en.wikipedia.org/wiki/BigTable">BigTable</a>. Uuden polven ratkaisut mahdollistavat massiivisten datamäärien rinnakkaiskäsittelyn.
 
 <a href="http://db-engines.com/en/ranking/wide+column+store">Suosituimmat</a> uuden saraketietokannat.
 
