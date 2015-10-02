@@ -449,51 +449,35 @@ Relaatiotietokannat ja esittelemämme NoSQL-kannat keskittyvät dataentiteettien
 
 Joissain tilanteissa entiteettien suhteiden selvittäminen relaatiotietokannassa saattaa olla erittäin hankalaa. Oletetaan, että meillä on Henkilöitä kuvaava taulu:
 
-
+<pre>
 Henkilö
 -------
-pk id
-nimi
+pk id integer
+nimi string
+</pre>
 
 sekä taulu, joka liittää vanhemmat ja lapset toisiinsa:
 
+<pre>
 Vanhemmuus
 -----------
-fk lapsi
-fk vanhempi
+fk lapsi integer
+fk vanhempi integer
+</pre>
 
 Jos nyt haluaisimme selvittää henkilön "Arto Vihavainen" kaikki sukulaiset, huomaamme, että kyselyn tekeminen SQL:llä olisi erittäin vaikeaa.
 
-Vastaavasti jos mallintaisimme relaatiotietokannan avulla karttaa ja meillä olisi taulu kaupungeille:
+Tilanne mutkistuisi entisestään jos haluaisimme kuvata myös muunlaisia suhteita, esim. henkilöiden työsuhteita firmoihin, jäsenyyksiä yhdistyksiin, ystävyyttä, omistussuhteita erilaisiin asioihin sekä asioista tykkäämisiä ja vihaamisia. Yksi vaikeuttava tekijä olisi se, että kaikki erilaiset suhteet pitäisi mallintaa omina liitostauluinaan. Jos ohjelmassa käytettävät suhdetyypit lisääntyisivät, tulisi tietokantaskeemaan lisätä koko ajan lisää erilaisia liitostauluja. Myös kyselyt muuttuisivat koko ajan hankallimmaksi ja vaatisivat yhä monimutkaisempia raskaita liitosoperaatioita. Esim. seuraavien asioiden selvittäminen olisi SQL:llä melko työlästä:
 
-Kaupunki
---------
-pk id
-nimi
-maa
+<ul>
+<li>Arton kaikkien esivanhempien työpaikat</li>
+<li>Kirjat joista Arton arton jonkun esivanhemman ystävät pitivät</li>
+<li>Etsi Arton ystävistä ja ystävien ystävistä, ja näiden ystävistä jne kaikki ne, jotka ovat opiskelleet samassa paikassa kun Arto</li>
+</ul>
 
-ja kaupunkeja yhdistäville teille
 
-Tie
------
-int pituus
-fk k1
-fk k2
+Ratkaisun tämänkaltaisiin tilanteisiin tuovat <em>verkkotietokannat</em>, jotka mallintavat eksplisiittisesti sekä entiteetit eli esim. kaupungint ja niiden ominaisuudet että entiteettien väliset suhteet ja niiden ominaisuudet kuten tiet kaupunkien välillä. Kuten nimestä voi päätellä, on verkkotietokannan pohjalla olevana tietorakenteena verkko (engl. <em>graph</em>), joka koostuu entiteettejä kuvaavista <em>solmuista</em> (engl. <em>node</em>) ja niiden välisiä suhteita kuvaavista <em>kaarista</em> (engl. <em>edge</em>). Sekä solmuilla, että kaarilla voi olla attribuutteja. Alla kuvassa verkko. joka kuvaa yllä olevan esimerkin mallintamista verkkotietokannan solmuiksi ja kaariksi.
 
-olisi erittäin hankalaa selvittää SQL:llä esim. mikä on lyhin reitti Helsingistä Roomaan.
-
-Ratkaisun tämänkaltaisiin tilanteisiin tuovat verkkotietokannat, jotka mallintavat eksplisiittisesti sekä entiteetit eli esim. kaupungint ja niiden ominaisuudet että entiteettien väliset suhteet ja niiden ominaisuudet kuten tiet kaupunkien välillä.
-
-Verkkotietokantojen entiteetit eivät ole välttämättä samaa tyyppiä, esim. henkilöitä, entiteettit voivat olla minkä tyyppisiä vaan, ja kaiken tyyppisillä entiteetit voivat verkkotietokannassa olla suhteessa toisiinsa, esim:
-
-             - on jatko-opiskelija ->
-Arto:Henkilö - työskentelee        -> TKTL:laitos
-  |          - harrastaa -> sähly:urheilulaji
-  |          - osuu -> "kukontori 1, espoo":Asunto
-tuntee
-  |
- \ /
-Matti:Henkilö
 
 Verkkotietokannat tarjoavat kyselykielen, jonka avulla on helppo "navigoida" verkossa. Toisin kuin relaatiotietokannoissa, jotka edellyttävät yhteyden muodostamiseen laskennallisesti kallista join-operaatiota, yhteyksien navigointi verkkotietokannassa on nopeaa. Verkkotietokantojen käyttö onkin yleistynyt esim
 
