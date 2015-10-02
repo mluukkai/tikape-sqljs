@@ -501,7 +501,7 @@ Etsi Arton ystävistä ja ystävien ystävistä, ja näiden ystävistä jne kaik
 <pre>
 MATCH (arto:{name:"Arto"}) -[:FRIENDS_WITH*1..]-> (friend) -[:STUDIED_IN]-> (school)
 WHERE arto -[:STUDIED_IN]-> (school)
-RETURN school.name
+RETURN friend.name
 </pre>
 
 Verkkotietokantojen käyttö on yleistynyt esim. sosiaalisen median sovelluksissa ja suosittelujärjestelmissä.
