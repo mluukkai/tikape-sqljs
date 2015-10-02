@@ -478,11 +478,31 @@ Tilanne mutkistuisi entisestään jos haluaisimme kuvata myös muunlaisia suhtei
 
 Ratkaisun tämänkaltaisiin tilanteisiin tuovat <em>verkkotietokannat</em>, jotka mallintavat eksplisiittisesti sekä entiteetit eli esim. kaupungint ja niiden ominaisuudet että entiteettien väliset suhteet ja niiden ominaisuudet kuten tiet kaupunkien välillä. Kuten nimestä voi päätellä, on verkkotietokannan pohjalla olevana tietorakenteena verkko (engl. <em>graph</em>), joka koostuu entiteettejä kuvaavista <em>solmuista</em> (engl. <em>node</em>) ja niiden välisiä suhteita kuvaavista <em>kaarista</em> (engl. <em>edge</em>). Sekä solmuilla, että kaarilla voi olla attribuutteja. Alla kuvassa verkko. joka kuvaa yllä olevan esimerkin mallintamista verkkotietokannan solmuiksi ja kaariksi.
 
-Verkkotietokannat tarjoavat kyselykielen, jonka avulla on helppo "navigoida" verkossa. Toisin kuin relaatiotietokannoissa, jotka edellyttävät yhteyden muodostamiseen laskennallisesti kallista join-operaatiota, yhteyksien navigointi verkkotietokannassa on nopeaa. Verkkotietokannoille ei ole olemassa yhtä vakiintunutta kyselykieltä. On kuitenkin tiettyjä kyselykieliä kuten <a href="http://neo4j.com/developer/cypher-query-language/">Cypher</a>, joita voi käyttää useiden verkkotietokantojen kanssa. Seuraavassa muutama esimerkki ylläolevaan verkkotietokantaan kohdistetuista kyselyistä:
+Verkkotietokannat tarjoavat kyselykielen, jonka avulla on helppo "navigoida" verkossa. Toisin kuin relaatiotietokannoissa, jotka edellyttävät yhteyden muodostamiseen laskennallisesti kallista join-operaatiota, yhteyksien navigointi verkkotietokannassa on nopeaa. Verkkotietokannoille ei ole olemassa yhtä vakiintunutta kyselykieltä. On kuitenkin tiettyjä kyselykieliä kuten <a href="http://neo4j.com/developer/cypher-query-language/">Cypher</a>, joita voi käyttää useiden verkkotietokantojen kanssa. 
+
+Seuraavassa muutama esimerkki ylläolevaan verkkotietokantaan kohdistetuista Cypherillä tehdyistä kyselyistä. Haetaan ensin Arton vanhemmat
 
 <pre>
+MATCH ({name:"Arto"}) -[:CHILD_OF]-> (parent)
+RETURN parent.name
 </pre>
 
+MATCH-määre jakee ensin solmun, jonka nimenä on Arto ja sen jälkeen seurataan :CHILD_OF kaarta solmun vanhempiin, joiden nimet kysely palauttaa. Kysely siis palauttaa ne solmut <em>p</em> joille pätee ehto: solmuun johtaa kaari :CHILD_OF sellaisesta solmusta johon liittyy attribuutti <em>nimi</em> jonka arvo on "Arto.
+
+Kirjat joista Arton arton jonkun esivanhemman ystävät pitivät:
+
+<pre>
+MATCH ({name:"Arto"}) -[:CHILD_OF*1..]-> (relative) -[:LIKED]-> (book:BOOK)
+RETURN book.title
+</pre>
+
+Etsi Arton ystävistä ja ystävien ystävistä, ja näiden ystävistä jne kaikki ne, jotka ovat opiskelleet samassa paikassa kun Arto:
+
+<pre>
+MATCH (arto:{name:"Arto"}) -[:FRIENDS_WITH*1..]-> (friend) -[:STUDIED_IN]-> (school)
+WHERE arto -[:STUDIED_IN]-> (school)
+RETURN school.name
+</pre>
 
 Verkkotietokantojen käyttö on yleistynyt esim. sosiaalisen median sovelluksissa ja suosittelujärjestelmissä.
 
