@@ -478,8 +478,13 @@ Tilanne mutkistuisi entisestään jos haluaisimme kuvata myös muunlaisia suhtei
 
 Ratkaisun tämänkaltaisiin tilanteisiin tuovat <em>verkkotietokannat</em>, jotka mallintavat eksplisiittisesti sekä entiteetit eli esim. kaupungint ja niiden ominaisuudet että entiteettien väliset suhteet ja niiden ominaisuudet kuten tiet kaupunkien välillä. Kuten nimestä voi päätellä, on verkkotietokannan pohjalla olevana tietorakenteena verkko (engl. <em>graph</em>), joka koostuu entiteettejä kuvaavista <em>solmuista</em> (engl. <em>node</em>) ja niiden välisiä suhteita kuvaavista <em>kaarista</em> (engl. <em>edge</em>). Sekä solmuilla, että kaarilla voi olla attribuutteja. Alla kuvassa verkko. joka kuvaa yllä olevan esimerkin mallintamista verkkotietokannan solmuiksi ja kaariksi.
 
+Verkkotietokannat tarjoavat kyselykielen, jonka avulla on helppo "navigoida" verkossa. Toisin kuin relaatiotietokannoissa, jotka edellyttävät yhteyden muodostamiseen laskennallisesti kallista join-operaatiota, yhteyksien navigointi verkkotietokannassa on nopeaa. Verkkotietokannoille ei ole olemassa yhtä vakiintunutta kyselykieltä. On kuitenkin tiettyjä kyselykieliä kuten <a href="http://neo4j.com/developer/cypher-query-language/">Cypher</a>, joita voi käyttää useiden verkkotietokantojen kanssa. Seuraavassa muutama esimerkki ylläolevaan verkkotietokantaan kohdistetuista kyselyistä:
 
-Verkkotietokannat tarjoavat kyselykielen, jonka avulla on helppo "navigoida" verkossa. Toisin kuin relaatiotietokannoissa, jotka edellyttävät yhteyden muodostamiseen laskennallisesti kallista join-operaatiota, yhteyksien navigointi verkkotietokannassa on nopeaa. Verkkotietokantojen käyttö onkin yleistynyt esim
+<pre>
+</pre>
+
+
+Verkkotietokantojen käyttö on yleistynyt esim. sosiaalisen median sovelluksissa ja suosittelujärjestelmissä.
 
 <a href="http://db-engines.com/en/ranking/graph+dbms">Suosituimmat</a> verkkotietokannat.
 
@@ -496,5 +501,3 @@ NewSQL is a class of modern relational database management systems that seek to 
 </em>
 
 Eräs viime aikoina melko paljon huomiota saanut NewSQL-tietokanta on <a href="https://foundationdb.com/">FoundationDB</a> joka sisäiseltä organisoinniltaan on avain-arvotietokanta, mutta se tarjoaa kyselykieleksi (myös) SQL:n ja ACID-ominaisuudet takaavat transaktiot eli käyttäytyy sovellusohjelmien kannalta kuten normaali relaatiotietokanta mutta tarjoaa perinteistä relaatiotietokantaa skaalautuvamman ratkaisun.
-
-http://db-engines.com/en/ranking
