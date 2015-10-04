@@ -607,7 +607,7 @@ Tilanne mutkistuisi entisestään jos haluaisimme kuvata myös muunlaisia suhtei
 </ul>
 
 <p>
-Ratkaisun tämänkaltaisiin tilanteisiin tuovat <em>verkkotietokannat</em>, jotka mallintavat eksplisiittisesti sekä entiteetit eli esim. henkilöt ja niiden ominaisuudet että entiteettien väliset suhteet ja niiden ominaisuudet kuten sukulaisuuden henkilöiden välillä. Kuten nimestä voi päätellä, on verkkotietokannan pohjalla olevana tietorakenteena verkko (engl. <em>graph</em>), joka koostuu entiteettejä kuvaavista <em>solmuista</em> (engl. <em>node</em>) ja niiden välisiä suhteita kuvaavista <em>kaarista</em> (engl. <em>edge</em>). Sekä solmuilla, että kaarilla voi olla attribuutteja. Alla kuvassa verkko, joka kuvaa yllä olevan esimerkin mallintamista verkkotietokannan solmuiksi ja kaariksi.
+Ratkaisun tämänkaltaisiin tilanteisiin tuovat <em>verkkotietokannat</em>, jotka mallintavat eksplisiittisesti sekä entiteetit eli esim. henkilöt ja niiden ominaisuudet että entiteettien väliset suhteet ja niiden ominaisuudet kuten sukulaisuuden henkilöiden välillä. Kuten nimestä voi päätellä, on verkkotietokannan pohjalla olevana tietorakenteena verkko (engl. <em>graph</em>), joka koostuu entiteettejä kuvaavista <em>solmuista</em> (engl. <em>node</em>) ja niiden välisiä suhteita kuvaavista <em>kaarista</em> (engl. <em>edge</em>). Sekä solmuilla, että kaarilla voi olla attribuutteja. Verkko, joka kuvaa yllä olevan esimerkin mallintamista verkkotietokannan solmuiksi ja kaariksi:
 </p>
 
 <figure>
@@ -629,10 +629,12 @@ RETURN parent
 </pre>
 
 <p>
-MATCH-määre jakee ensin solmun, jonka nimenä on Arto ja sen jälkeen seurataan :CHILD_OF kaarta solmun vanhempiin, jotka kysely palauttaa. Kysely siis palauttaa ne solmut <em>parent</em> joille pätee ehto: solmuun johtaa kaari :CHILD_OF sellaisesta solmusta johon liittyy attribuutti <em>nimi</em>, jonka arvo on "Arto".
+MATCH-määre hakee ensin solmun, jonka nimenä on Arto ja sen jälkeen seurataan :CHILD_OF kaarta solmun vanhempiin, jotka kysely palauttaa. Kysely siis palauttaa ne solmut <em>parent</em> joille pätee ehto: solmuun johtaa kaari :CHILD_OF sellaisesta solmusta johon liittyy attribuutti <em>nimi</em>, jonka arvo on "Arto".
 </p>
 
-Kirjat joista Arton arton jonkun esivanhemman ystävät pitivät:
+<p>
+Kirjat joista Arton jonkun esivanhemman ystävät pitivät:
+</p>
 
 <pre>
 MATCH ({name:"Arto"}) -[:CHILD_OF*1..]-> (relative) -[:LIKES]-> (book:BOOK)
