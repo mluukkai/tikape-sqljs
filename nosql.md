@@ -610,9 +610,9 @@ Tilanne mutkistuisi entisestään jos haluaisimme kuvata myös muunlaisia suhtei
 Ratkaisun tämänkaltaisiin tilanteisiin tuovat <em>verkkotietokannat</em>, jotka mallintavat eksplisiittisesti sekä entiteetit eli esim. henkilöt ja niiden ominaisuudet että entiteettien väliset suhteet ja niiden ominaisuudet kuten sukulaisuuden henkilöiden välillä. Kuten nimestä voi päätellä, on verkkotietokannan pohjalla olevana tietorakenteena verkko (engl. <em>graph</em>), joka koostuu entiteettejä kuvaavista <em>solmuista</em> (engl. <em>node</em>) ja niiden välisiä suhteita kuvaavista <em>kaarista</em> (engl. <em>edge</em>). Sekä solmuilla, että kaarilla voi olla attribuutteja. Alla kuvassa verkko, joka kuvaa yllä olevan esimerkin mallintamista verkkotietokannan solmuiksi ja kaariksi.
 </p>
 
-<pre>
-KUVA TÄHÄN
-</pre>
+<figure>
+  <img src="https://raw.githubusercontent.com/mluukkai/tikape-sqljs/master/verkkokanta.png" alt="Verkkotietokanta">
+</figure>
 
 <p>
 Verkkotietokannat tarjoavat kyselykielen, jonka avulla on helppo "navigoida" verkossa. Toisin kuin relaatiotietokannoissa, jotka edellyttävät yhteyden muodostamiseen laskennallisesti kallista join-operaatiota, yhteyksien navigointi verkkotietokannassa on nopeaa. Verkkotietokannoille ei ole olemassa yhtä vakiintunutta kyselykieltä. On kuitenkin tiettyjä kyselykieliä kuten tämän hetken suosituimman verkkotietokannan <a href="http://neo4j.com">Neo4J</a> käyttämä
@@ -635,7 +635,7 @@ MATCH-määre jakee ensin solmun, jonka nimenä on Arto ja sen jälkeen seurataa
 Kirjat joista Arton arton jonkun esivanhemman ystävät pitivät:
 
 <pre>
-MATCH ({name:"Arto"}) -[:CHILD_OF*1..]-> (relative) -[:LIKED]-> (book:BOOK)
+MATCH ({name:"Arto"}) -[:CHILD_OF*1..]-> (relative) -[:LIKES]-> (book:BOOK)
 RETURN book
 </pre>
 
