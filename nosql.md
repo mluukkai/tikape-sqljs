@@ -566,21 +566,25 @@ Vanhemmman sukupolven saraketietokannoissa data on organisoitu relaatiotietokant
 
 <h3>Verkkotietokannat</h3>
 
-Relaatiotietokannat ja esittelemämme NoSQL-kannat keskittyvät dataentiteettien esittämiseen. Relaatiotietokannat esittävät entiteetit taulujen riveinä, esim. Henkilö-taulussa jokainen ihminen esitettäisiin omana rivinään. Yhteydet ja suhteet eri entiteettien välillä esitetään epäsuorasti vierasavaimien tai liitostaulujen avulla. Itse yhteys, esim. <em>missä henkilö Arto on töissä</em> saadaan selville vasta kyselyn aikana tapahtuvan liitosoperaation avulla.
-
+<p>
+Relaatiotietokannat ja esittelemämme NoSQL-kantatyypit keskittyvät dataentiteettien esittämiseen. Relaatiotietokannat esittävät entiteetit taulujen riveinä, esim. Henkilö-taulussa jokainen ihminen esitettään omana rivinään. Yhteydet ja suhteet eri entiteettien välillä esitetään epäsuorasti vierasavaimien ja liitostaulujen avulla. Itse yhteys, esim. <em>missä henkilö Arto on töissä</em> saadaan selville vasta kyselyn aikana tapahtuvan liitosoperaation avulla.
+</p>
+<p>
 Joissain tilanteissa entiteettien suhteiden selvittäminen relaatiotietokannassa saattaa olla erittäin hankalaa. Oletetaan, että meillä on Henkilöitä kuvaava taulu:
-
+</p>
 <pre>
-CREATE TABLE Henkilo(
+CREATE TABLE Henkilo (
   id integer not null PRIMARY KEY,
   nimi string not null
 )
 </pre>
 
+<p>
 sekä taulu, joka liittää vanhemmat ja lapset toisiinsa:
+</p>
 
 <pre>
-CREATE TABLE Vanhemmuus(
+CREATE TABLE Vanhemmuus (
   id integer not null PRIMARY KEY,
   lapsi_id integer,
   vanhempi_id integer,
@@ -589,33 +593,44 @@ CREATE TABLE Vanhemmuus(
 )
 </pre>
 
-Jos nyt haluaisimme selvittää henkilön "Arto Vihavainen" kaikki sukulaiset, huomaamme, että kyselyn tekeminen SQL:llä olisi erittäin vaikeaa.
+<p>Jos nyt haluaisimme selvittää henkilön "Arto Vihavainen" kaikki sukulaiset, huomaamme, että kyselyn tekeminen SQL:llä olisi erittäin vaikeaa.
+</p>
 
-Tilanne mutkistuisi entisestään jos haluaisimme kuvata myös muunlaisia suhteita, esim. henkilöiden työsuhteita firmoihin, jäsenyyksiä yhdistyksiin, ystävyyttä, omistussuhteita erilaisiin asioihin sekä asioista tykkäämisiä ja vihaamisia. Yksi vaikeuttava tekijä olisi se, että kaikki erilaiset suhteet pitäisi mallintaa omina liitostauluinaan. Jos ohjelmassa käytettävät suhdetyypit lisääntyisivät, tulisi tietokantaskeemaan lisätä koko ajan lisää erilaisia liitostauluja. Myös kyselyt muuttuisivat koko ajan hankallimmaksi ja vaatisivat yhä monimutkaisempia raskaita liitosoperaatioita. Esim. seuraavien asioiden selvittäminen olisi SQL:llä melko työlästä:
+<p>
+Tilanne mutkistuisi entisestään jos haluaisimme kuvata myös muunlaisia suhteita, esim. henkilöiden työsuhteita firmoihin, jäsenyyksiä yhdistyksiin, ystävyyttä, omistussuhteita erilaisiin asioihin sekä asioista tykkäämisiä ja vihaamisia. Yksi vaikeuttava tekijä olisi se, että kaikki erilaiset suhteet pitäisi mallintaa omina liitostauluinaan. Jos ohjelmassa käytettävät suhdetyypit lisääntyisivät, tulisi tietokantaskeemaan lisätä koko ajan uusia erityyppisiä liitostauluja. Myös kyselyt muuttuisivat koko ajan hankallimmaksi ja vaatisivat yhä monimutkaisempia, raskaita liitosoperaatioita. Esim. seuraavien asioiden selvittäminen olisi SQL:llä melko työlästä:
+</p>
 
 <ul>
 <li>Arton kaikkien esivanhempien työpaikat</li>
-<li>Kirjat joista Arton arton jonkun esivanhemman ystävät pitivät</li>
-<li>Etsi Arton ystävistä ja ystävien ystävistä, ja näiden ystävistä jne kaikki ne, jotka ovat opiskelleet samassa paikassa kun Arto</li>
+<li>Kirjat joista jonkun Arton esivanhemman ystävät pitivät</li>
+<li>Arton ystävistä ja ystävien ystävistä, ja näiden ystävistä jne kaikki ne, jotka ovat opiskelleet samassa paikassa kun Arto</li>
 </ul>
 
-
-Ratkaisun tämänkaltaisiin tilanteisiin tuovat <em>verkkotietokannat</em>, jotka mallintavat eksplisiittisesti sekä entiteetit eli esim. kaupungint ja niiden ominaisuudet että entiteettien väliset suhteet ja niiden ominaisuudet kuten tiet kaupunkien välillä. Kuten nimestä voi päätellä, on verkkotietokannan pohjalla olevana tietorakenteena verkko (engl. <em>graph</em>), joka koostuu entiteettejä kuvaavista <em>solmuista</em> (engl. <em>node</em>) ja niiden välisiä suhteita kuvaavista <em>kaarista</em> (engl. <em>edge</em>). Sekä solmuilla, että kaarilla voi olla attribuutteja. Alla kuvassa verkko. joka kuvaa yllä olevan esimerkin mallintamista verkkotietokannan solmuiksi ja kaariksi.
+<p>
+Ratkaisun tämänkaltaisiin tilanteisiin tuovat <em>verkkotietokannat</em>, jotka mallintavat eksplisiittisesti sekä entiteetit eli esim. henkilöt ja niiden ominaisuudet että entiteettien väliset suhteet ja niiden ominaisuudet kuten sukulaisuuden henkilöiden välillä. Kuten nimestä voi päätellä, on verkkotietokannan pohjalla olevana tietorakenteena verkko (engl. <em>graph</em>), joka koostuu entiteettejä kuvaavista <em>solmuista</em> (engl. <em>node</em>) ja niiden välisiä suhteita kuvaavista <em>kaarista</em> (engl. <em>edge</em>). Sekä solmuilla, että kaarilla voi olla attribuutteja. Alla kuvassa verkko, joka kuvaa yllä olevan esimerkin mallintamista verkkotietokannan solmuiksi ja kaariksi.
+</p>
 
 <pre>
 KUVA TÄHÄN
 </pre>
 
-Verkkotietokannat tarjoavat kyselykielen, jonka avulla on helppo "navigoida" verkossa. Toisin kuin relaatiotietokannoissa, jotka edellyttävät yhteyden muodostamiseen laskennallisesti kallista join-operaatiota, yhteyksien navigointi verkkotietokannassa on nopeaa. Verkkotietokannoille ei ole olemassa yhtä vakiintunutta kyselykieltä. On kuitenkin tiettyjä kyselykieliä kuten <a href="http://neo4j.com/developer/cypher-query-language/">Cypher</a>, joita voi käyttää useiden verkkotietokantojen kanssa.
+<p>
+Verkkotietokannat tarjoavat kyselykielen, jonka avulla on helppo "navigoida" verkossa. Toisin kuin relaatiotietokannoissa, jotka edellyttävät yhteyden muodostamiseen laskennallisesti kallista join-operaatiota, yhteyksien navigointi verkkotietokannassa on nopeaa. Verkkotietokannoille ei ole olemassa yhtä vakiintunutta kyselykieltä. On kuitenkin tiettyjä kyselykieliä kuten tämän hetken suosituimman verkkotietokannan <a href="http://neo4j.com">Neo4J</a> käyttämä
+<a href="http://neo4j.com/developer/cypher-query-language/">Cypher</a>, joita jotkut muutkin verkkotietokannat tukevat.
+</p>
 
+<p>
 Seuraavassa muutama esimerkki ylläolevaan verkkotietokantaan kohdistetuista Cypherillä tehdyistä kyselyistä. Haetaan ensin Arton vanhemmat
+</p>
 
 <pre>
 MATCH ({name:"Arto"}) -[:CHILD_OF]-> (parent)
 RETURN parent
 </pre>
 
-MATCH-määre jakee ensin solmun, jonka nimenä on Arto ja sen jälkeen seurataan :CHILD_OF kaarta solmun vanhempiin, joiden nimet kysely palauttaa. Kysely siis palauttaa ne solmut <em>parent</em> joille pätee ehto: solmuun johtaa kaari :CHILD_OF sellaisesta solmusta johon liittyy attribuutti <em>nimi</em> jonka arvo on "Arto".
+<p>
+MATCH-määre jakee ensin solmun, jonka nimenä on Arto ja sen jälkeen seurataan :CHILD_OF kaarta solmun vanhempiin, jotka kysely palauttaa. Kysely siis palauttaa ne solmut <em>parent</em> joille pätee ehto: solmuun johtaa kaari :CHILD_OF sellaisesta solmusta johon liittyy attribuutti <em>nimi</em>, jonka arvo on "Arto".
+</p>
 
 Kirjat joista Arton arton jonkun esivanhemman ystävät pitivät:
 
