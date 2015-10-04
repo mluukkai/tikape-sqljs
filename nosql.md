@@ -624,7 +624,7 @@ Seuraavassa muutama esimerkki ylläolevaan verkkotietokantaan kohdistetuista Cyp
 </p>
 
 <pre>
-MATCH ({name:"Arto"}) -[:CHILD_OF]-> (parent)
+MATCH ({ name:"Arto" }) -[:CHILD_OF]-> (parent)
 RETURN parent
 </pre>
 
@@ -633,15 +633,17 @@ MATCH-määre hakee ensin solmun, jonka nimenä on Arto ja sen jälkeen seurataa
 </p>
 
 <p>
-Kirjat joista Arton jonkun esivanhemman ystävät pitivät:
+Kirjat joista Arton jonkun esivanhemman ystävät pitävät:
 </p>
 
 <pre>
-MATCH ({name:"Arto"}) -[:CHILD_OF*1..]-> (relative) -[:LIKES]-> (book:BOOK)
+MATCH ({ name:"Arto" }) -[:CHILD_OF*1..]-> (relative) -[:LIKES]-> (book:Book)
 RETURN book
 </pre>
 
+<p>
 Nyt kysely palauttaa sellaiset solmut <em>book</em> joille pätee:
+</p>
 <ul>
 <li> solmun tyyppi on Book</li>
 <li>
@@ -649,37 +651,50 @@ Nyt kysely palauttaa sellaiset solmut <em>book</em> joille pätee:
 </li>
 
 </ul>
-Etsi Arton ystävistä ja ystävien ystävistä, ja näiden ystävistä jne kaikki ne, jotka ovat opiskelleet samassa paikassa kun Arto:
-
+<p>
+Arton ystävistä ja ystävien ystävistä, ja näiden ystävistä jne kaikki ne, jotka ovat opiskelleet samassa paikassa kun Arto:
+</p>
 <pre>
-MATCH (arto: {name:"Arto"}) -[:FRIENDS_WITH*1..]-> (friend) -[:STUDIED_IN]-> (school)
+MATCH (arto: { name:"Arto" }) -[:FRIENDS_WITH*1..]-> (friend) -[:STUDIED_IN]-> (school)
 WHERE arto -[:STUDIED_IN]-> (school)
 RETURN friend
 </pre>
 
+<p>
 Vielä yksi esimerkki. Miten löytäisimme lyhimmän ystävien ketjun joka yhdistää Arton ja Barack Obaman?
-
+</p>
 <pre>
-MATCH (arto: {name:"Arto"}) (barack:{ name:"Barack Obama" })
+MATCH (arto: { name:"Arto" }) (barack:{ name:"Barack Obama" })
 p = shortestPath( (arto) -[:FRIEND*1..]-> (barack) )
 
 RETURN p
 </pre>
 
-Eli ensin etsitään Arto ja Barack ja sen jälkeen Neo4J:n valmis funktio shortestPath etsii polun. Tämä kysely olisi todennäköisesti mahdoton tehdä SQL:llä tai ainakin äärimmäisen vaikea muotoilla ja todella hidas suorittaa. Verooktietokannat sopivatkin erittäin hyvin muutamiin sellasiiin käyttöskenaarioihin, joissa muut tietokantatyypit ovat lähes käyttökelvottomia. Verkkotietokantojen käyttö on yleistynyt esim. sosiaalisen median sovelluksissa ja suosittelujärjestelmissä.
+<p>
+Eli ensin etsitään Arto ja Barack ja sen jälkeen Neo4J:n valmis funktio <em>shortestPath</em> etsii lyhimmän polun solmujen välillä. Tämä kysely olisi todennäköisesti mahdoton tehdä SQL:llä tai ainakin äärimmäisen vaikea muotoilla ja todella hidas suorittaa. Verkkotietokannat sopivatkin erittäin hyvin muutamiin sellasiiin käyttöskenaarioihin, joissa muut tietokantatyypit ovat lähes käyttökelvottomia. Verkkotietokantojen käyttö onkin yleistynyt esim. sosiaalisen median sovelluksissa ja suosittelujärjestelmissä.
+</p>
 
+<p>
 <a href="http://db-engines.com/en/ranking/graph+dbms">Suosituimmat</a> verkkotietokannat.
-
+</p>
 
 <h2>NOSQL ja NewSQL</h2>
 
+<p>
 NoSQL-tietokannat löivät läpi suuren kohun saattamina ja erityisesti startupeissa oli muodikasta ottaa käyttöön helpommin suurille käyttäjämäärille skaalautuivia NoSQL-kantoja kuten MongoDB. Pikkuhiljaa kohu on laantunut, ja enenevissä määrin ollaan menossa jo aiemmin mainittuun
-<a href="http://martinfowler.com/bliki/PolyglotPersistence.html">polyglot persistancen</a> nimellä kulkevaan suuntaan, eli valitaan oikea työkalu kuhunkin käyttötarkoitukseen, ja erittäin tyypillistä onkin että jo hieman suuremmissa Web-palveluissa on käytössä dokumentti- avain-arvo- ja relaatiotietokanta. Uusimpana kehityssuuntana on ollut myös se, että vanhat relaatiotietokannat ovat ottaneet vaikutteita muista tietokantatyypeistä. Esim. tämän hetken ehkä suosituin Open Source -relaatiotietokanta PostgeSQL sisältää paljon  <a href="http://www.postgresql.org/docs/9.4/static/datatype-json.html">dokumenttitietokantoja vastaavaa toiminnallisuutta</a>. Kehitystä on tapahtunut myös toiseen suuntaan, jotkut dokumenttitietokannat ovat mahdollistaneet <a href="https://azure.microsoft.com/en-us/documentation/articles/documentdb-sql-query/">SQL:n käytön kyselykielenä.</a>
+<a href="http://martinfowler.com/bliki/PolyglotPersistence.html">polyglot persistancen</a> nimellä kulkevaan suuntaan, eli valitaan oikea työkalu kuhunkin käyttötarkoitukseen, ja erittäin tyypillistä onkin että jo hieman suuremmissa sovelluksissa on käytössä dokumentti-, avain-arvo- ja relaatiotietokanta. Uusimpana kehityssuuntana on ollut myös se, että vanhat relaatiotietokannat ovat ottaneet vaikutteita muista tietokantatyypeistä. Esim. tämän hetken ehkä suosituin Open Source -relaatiotietokanta PostgeSQL sisältää paljon  <a href="http://www.postgresql.org/docs/9.4/static/datatype-json.html">dokumenttitietokantoja vastaavaa toiminnallisuutta</a>. Kehitystä on tapahtunut myös toiseen suuntaan, jotkut dokumenttitietokannat ovat mahdollistaneet <a href="https://azure.microsoft.com/en-us/documentation/articles/documentdb-sql-query/">SQL:n käytön kyselykielenä.</a>
+</p>
 
-Kahtiajaon hieman liuettua termin NoSQL sijaan onkin alettu puhua <em>Not Only SQL</em> -tietokannoista, ja termi on muokkautunut muotoon <em>NOSQL</em>. Päätään nostaa esille myös vielä melko epämääräisesti määritelty termi <em><a href="http://www.dbta.com/Columns/DBA-Corner/What-Is-a-NewSQL-Database-System-104489.aspx">NewSQL</a></em>. Wikipedian mukaan NewSQL:llä tarkoittaa seuraavaa:
+<p>
+Kahtiajaon hieman liudennuttua termin NoSQL sijaan onkin alettu puhua <em>Not Only SQL</em> -tietokannoista, ja termi on muokkautunut muotoon <em>NOSQL</em>. Päätään nostaa esille myös vielä melko epämääräisesti määritelty termi <em><a href="http://www.dbta.com/Columns/DBA-Corner/What-Is-a-NewSQL-Database-System-104489.aspx">NewSQL</a></em>. Wikipedian mukaan NewSQL:llä tarkoittaa seuraavaa:
+</p>
 
 <em>
 NewSQL is a class of modern relational database management systems that seek to provide the same scalable performance of NoSQL systems for online transaction processing (OLTP) read-write workloads while still maintaining the ACID guarantees of a traditional database system.
+
+Although NewSQL systems vary greatly in their internal architectures, the two distinguishing features common amongst them is that they all support the relational data model and use SQL as their primary interface.
 </em>
 
-Eräs viime aikoina melko paljon huomiota saanut NewSQL-tietokanta on <a href="https://foundationdb.com/">FoundationDB</a> joka sisäiseltä organisoinniltaan on avain-arvotietokanta, mutta se tarjoaa kyselykieleksi (myös) SQL:n ja ACID-ominaisuudet takaavat transaktiot eli käyttäytyy sovellusohjelmien kannalta kuten normaali relaatiotietokanta mutta tarjoaa perinteistä relaatiotietokantaa skaalautuvamman ratkaisun.
+<p>
+Eräs viime aikoina melko paljon huomiota saanut NewSQL-tietokanta on <a href="https://foundationdb.com/">FoundationDB</a>, joka sisäiseltä organisoinniltaan on avain-arvotietokanta, mutta se tarjoaa kyselykieleksi (myös) SQL:n ja ACID-ominaisuudet takaavat transaktiot eli käyttäytyy sovellusohjelmien kannalta kuten normaali relaatiotietokanta mutta tarjoaa perinteistä relaatiotietokantaa skaalautuvamman ratkaisun.
+</p>
