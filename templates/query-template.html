@@ -2,34 +2,36 @@
 
 </textarea>
 
-<button ng-click="run_query(query)">suorita kysely</button>
+<button class="btn btn-success btn-sm" ng-click="run_query(query)">Suorita kysely</button>
 
 <div style="color: red;">
     {{error}}
 </div>
 
 <div ng-show="columns">
-
-    <strong>kyselyn tulos</strong>
-
-    <table border="1">
-        <thead>
-            <tr>
-                <th ng-repeat="column in columns">
-                    {{column}}
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="row in rows">
-                <td ng-repeat="column in columns">
-                    {{row[ column ]}}
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <button ng-hide="editable=='false'" ng-click="clear()">clear</button>
+  <div class="row">
+    <div class="col col-md-6">
+      <p class="tulos">Kyselyn tulos</p>
+      <table class="table table-hover" border="1">
+          <thead>
+              <tr>
+                  <th ng-repeat="column in columns">
+                      {{column}}
+                  </th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr ng-repeat="row in rows">
+                  <td ng-repeat="column in columns">
+                      {{row[ column ]}}
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+    </div>
+    <div class="col col-md-6"></div>
+  </div>
+    <button class="btn btn-warning" ng-hide="editable=='false'" ng-click="clear()">clear</button>
 
     <br>
 
